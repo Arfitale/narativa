@@ -1,1 +1,296 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn-svelte/tailwind.css';
+@import '@fontsource-variable/geist';
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------
+   Raw Narativa palette as plain Tailwind color utilities
+   (bg-royal-violet-500, text-mauve-900, etc.) — used for the slider art
+   and anywhere you want a specific swatch rather than a semantic token.
+   Note: your palette had two entries both named "dark_amethyst"
+   (#10002b and #240046). Kept the first, renamed the second
+   "deep-amethyst" so both are reachable.
+--------------------------------------------------------------------- */
+@theme {
+	--color-dark-amethyst-100: #030008;
+	--color-dark-amethyst-200: #060010;
+	--color-dark-amethyst-300: #090018;
+	--color-dark-amethyst-400: #0c0021;
+	--color-dark-amethyst-500: #10002b;
+	--color-dark-amethyst-600: #310087;
+	--color-dark-amethyst-700: #5400e4;
+	--color-dark-amethyst-800: #8843ff;
+	--color-dark-amethyst-900: #c4a1ff;
+	--color-dark-amethyst: #10002b;
+
+	--color-deep-amethyst-100: #07000e;
+	--color-deep-amethyst-200: #0f001d;
+	--color-deep-amethyst-300: #16002b;
+	--color-deep-amethyst-400: #1e0039;
+	--color-deep-amethyst-500: #240046;
+	--color-deep-amethyst-600: #52009f;
+	--color-deep-amethyst-700: #8000f7;
+	--color-deep-amethyst-800: #aa50ff;
+	--color-deep-amethyst-900: #d5a7ff;
+	--color-deep-amethyst: #240046;
+
+	--color-indigo-ink-100: #0c0216;
+	--color-indigo-ink-200: #18042b;
+	--color-indigo-ink-300: #240541;
+	--color-indigo-ink-400: #300757;
+	--color-indigo-ink-500: #3c096c;
+	--color-indigo-ink-600: #650fb5;
+	--color-indigo-ink-700: #8d25ed;
+	--color-indigo-ink-800: #b36ef3;
+	--color-indigo-ink-900: #d9b6f9;
+	--color-indigo-ink: #3c096c;
+
+	--color-indigo-velvet-100: #12051f;
+	--color-indigo-velvet-200: #240a3e;
+	--color-indigo-velvet-300: #360e5d;
+	--color-indigo-velvet-400: #47137c;
+	--color-indigo-velvet-500: #5a189a;
+	--color-indigo-velvet-600: #7a21d4;
+	--color-indigo-velvet-700: #9c53e4;
+	--color-indigo-velvet-800: #bd8ced;
+	--color-indigo-velvet-900: #dec6f6;
+	--color-indigo-velvet: #5a189a;
+
+	--color-royal-violet-100: #180926;
+	--color-royal-violet-200: #31114c;
+	--color-royal-violet-300: #491a73;
+	--color-royal-violet-400: #622399;
+	--color-royal-violet-500: #7b2cbf;
+	--color-royal-violet-600: #954bd6;
+	--color-royal-violet-700: #b078e0;
+	--color-royal-violet-800: #caa5eb;
+	--color-royal-violet-900: #e5d2f5;
+	--color-royal-violet: #7b2cbf;
+
+	--color-lavender-purple-100: #200a33;
+	--color-lavender-purple-200: #401365;
+	--color-lavender-purple-300: #601d98;
+	--color-lavender-purple-400: #8127ca;
+	--color-lavender-purple-500: #9d4edd;
+	--color-lavender-purple-600: #b172e4;
+	--color-lavender-purple-700: #c596eb;
+	--color-lavender-purple-800: #d8b9f2;
+	--color-lavender-purple-900: #ecdcf8;
+	--color-lavender-purple: #9d4edd;
+
+	--color-mauve-magic-100: #2b004d;
+	--color-mauve-magic-200: #570099;
+	--color-mauve-magic-300: #8200e6;
+	--color-mauve-magic-400: #a733ff;
+	--color-mauve-magic-500: #c77dff;
+	--color-mauve-magic-600: #d399ff;
+	--color-mauve-magic-700: #deb3ff;
+	--color-mauve-magic-800: #e9ccff;
+	--color-mauve-magic-900: #f4e5ff;
+	--color-mauve-magic: #c77dff;
+
+	--color-mauve-100: #360055;
+	--color-mauve-200: #6b00a9;
+	--color-mauve-300: #a100fe;
+	--color-mauve-400: #c054ff;
+	--color-mauve-500: #e0aaff;
+	--color-mauve-600: #e6baff;
+	--color-mauve-700: #eccbff;
+	--color-mauve-800: #f2dcff;
+	--color-mauve-900: #f9eeff;
+	--color-mauve: #e0aaff;
+
+	--font-display: 'Space Grotesk', 'Geist Variable', sans-serif;
+}
+
+/* ---------------------------------------------------------------------
+   Semantic shadcn tokens — same variable names shadcn-svelte's own
+   components (Button, Input, Checkbox, Label, ...) already read, just
+   repainted with the Narativa palette. Light lives on :root, dark is
+   opt-in via .dark (per @custom-variant above), and dark is the
+   theme you ship by default — see +page.svelte, which adds the
+   `dark` class at the root and lets the toggle button remove it.
+--------------------------------------------------------------------- */
+:root {
+	--background: #fdfaff;
+	--foreground: var(--color-deep-amethyst-500);
+	--card: #ffffff;
+	--card-foreground: var(--color-deep-amethyst-500);
+	--popover: #ffffff;
+	--popover-foreground: var(--color-deep-amethyst-500);
+	--primary: var(--color-royal-violet-500);
+	--primary-foreground: #ffffff;
+	--secondary: var(--color-lavender-purple-900);
+	--secondary-foreground: var(--color-deep-amethyst-500);
+	--muted: var(--color-lavender-purple-900);
+	--muted-foreground: color-mix(
+		in oklab,
+		var(--color-deep-amethyst-500) 55%,
+		var(--color-royal-violet-500) 45%
+	);
+	--accent: var(--color-lavender-purple-800);
+	--accent-foreground: var(--color-deep-amethyst-500);
+	--destructive: oklch(0.577 0.245 27.325);
+	--border: color-mix(in oklab, var(--color-royal-violet-500) 16%, transparent 84%);
+	--input: color-mix(in oklab, var(--color-royal-violet-500) 20%, transparent 80%);
+	--ring: var(--color-royal-violet-400);
+	--chart-1: var(--color-royal-violet-500);
+	--chart-2: var(--color-indigo-velvet-500);
+	--chart-3: var(--color-lavender-purple-500);
+	--chart-4: var(--color-mauve-magic-500);
+	--chart-5: var(--color-indigo-ink-500);
+	--radius: 0.625rem;
+	--sidebar: #ffffff;
+	--sidebar-foreground: var(--color-deep-amethyst-500);
+	--sidebar-primary: var(--color-royal-violet-500);
+	--sidebar-primary-foreground: #ffffff;
+	--sidebar-accent: var(--color-lavender-purple-900);
+	--sidebar-accent-foreground: var(--color-deep-amethyst-500);
+	--sidebar-border: color-mix(in oklab, var(--color-royal-violet-500) 16%, transparent 84%);
+	--sidebar-ring: var(--color-royal-violet-400);
+
+	/* extra brand-only tokens, not part of the shadcn base set */
+	--gradient-from: var(--color-royal-violet-500);
+	--gradient-to: var(--color-indigo-velvet-600);
+}
+
+.dark {
+	--background: var(--color-dark-amethyst-500);
+	--foreground: var(--color-mauve-900);
+	--card: color-mix(
+		in oklab,
+		var(--color-deep-amethyst-400) 70%,
+		var(--color-dark-amethyst-500) 30%
+	);
+	--card-foreground: var(--color-mauve-900);
+	--popover: var(--color-deep-amethyst-400);
+	--popover-foreground: var(--color-mauve-900);
+	--primary: var(--color-royal-violet-500);
+	--primary-foreground: #ffffff;
+	--secondary: var(--color-indigo-ink-400);
+	--secondary-foreground: var(--color-mauve-900);
+	--muted: var(--color-indigo-ink-300);
+	--muted-foreground: color-mix(
+		in oklab,
+		var(--color-mauve-900) 45%,
+		var(--color-indigo-ink-500) 55%
+	);
+	--accent: var(--color-indigo-velvet-400);
+	--accent-foreground: var(--color-mauve-900);
+	--destructive: oklch(0.704 0.191 22.216);
+	--border: color-mix(in oklab, var(--color-lavender-purple-500) 20%, transparent 80%);
+	--input: color-mix(in oklab, var(--color-lavender-purple-500) 26%, transparent 74%);
+	--ring: var(--color-lavender-purple-400);
+	--chart-1: var(--color-mauve-magic-500);
+	--chart-2: var(--color-lavender-purple-500);
+	--chart-3: var(--color-royal-violet-500);
+	--chart-4: var(--color-indigo-velvet-500);
+	--chart-5: var(--color-indigo-ink-500);
+	--sidebar: var(--color-deep-amethyst-500);
+	--sidebar-foreground: var(--color-mauve-900);
+	--sidebar-primary: var(--color-royal-violet-500);
+	--sidebar-primary-foreground: #ffffff;
+	--sidebar-accent: var(--color-indigo-ink-400);
+	--sidebar-accent-foreground: var(--color-mauve-900);
+	--sidebar-border: color-mix(in oklab, var(--color-lavender-purple-500) 20%, transparent 80%);
+	--sidebar-ring: var(--color-lavender-purple-400);
+
+	--gradient-from: var(--color-royal-violet-500);
+	--gradient-to: var(--color-indigo-velvet-600);
+}
+
+@theme inline {
+	--font-sans: 'Geist Variable', sans-serif;
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
+	}
+}
+
+@keyframes duneDrift {
+	0% {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+	100% {
+		transform: translate3d(-2%, -1.5%, 0) scale(1.04);
+	}
+}
+
+@keyframes slideFill {
+	from {
+		width: 0%;
+	}
+	to {
+		width: 100%;
+	}
+}
+
+@keyframes fadeSlide {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+	}
+}
