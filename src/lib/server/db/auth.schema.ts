@@ -1,53 +1,66 @@
-// If you see this file, you have not run the auth:schema script yet, but you should!
-// src/lib/server/db/schema.ts
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { betterAuthId, createdAt, expiresAt, updatedAt } from '$lib/utils/server/db/pg';
+import { pgTable, text, timestamp, boolean, uuid, primaryKey } from 'drizzle-orm/pg-core';
 
-export const user = sqliteTable('user', {
-	id: text('id').primaryKey(),
-	name: text('name').notNull(),
+/* ============================================================
+ * Better Auth
+ * ============================================================ */
+
+export const user = pgTable('user', {
+	id: betterAuthId('user_id'),
 	email: text('email').notNull().unique(),
-	emailVerified: integer('email_verified', { mode: 'boolean' }).notNull(),
+	name: text('name').notNull(),
+	emailVerified: boolean('email_verified').notNull().default(false),
 	image: text('image'),
-	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+	createdAt: createdAt,
+	updatedAt: updatedAt
 });
 
-export const session = sqliteTable('session', {
-	id: text('id').primaryKey(),
-	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+export const session = pgTable('session', {
+	id: betterAuthId('session_id'),
 	token: text('token').notNull().unique(),
-	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, {
+			onDelete: 'cascade'
+		}),
+	expiresAt: expiresAt,
+
+	// Optional
 	ipAddress: text('ip_address'),
 	userAgent: text('user_agent'),
-	userId: text('user_id')
-		.notNull()
-		.references(() => user.id)
+
+	createdAt: createdAt,
+	updatedAt: updatedAt
 });
 
-export const account = sqliteTable('account', {
-	id: text('id').primaryKey(),
+export const account = pgTable('account', {
+	id: betterAuthId('id'),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, {
+			onDelete: 'cascade'
+		}),
 	accountId: text('account_id').notNull(),
 	providerId: text('provider_id').notNull(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => user.id),
 	accessToken: text('access_token'),
 	refreshToken: text('refresh_token'),
-	idToken: text('id_token'),
-	accessTokenExpiresAt: integer('access_token_expires_at', { mode: 'timestamp' }),
-	refreshTokenExpiresAt: integer('refresh_token_expires_at', { mode: 'timestamp' }),
+	accessTokenExpiresAt: timestamp('access_token_expires_at', {
+		withTimezone: true
+	}),
+	refreshTokenExpiresAt: timestamp('refresh_token_expires_at', {
+		withTimezone: true
+	}),
 	scope: text('scope'),
+	idToken: text('id_token'),
 	password: text('password'),
-	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+	createdAt: createdAt,
+	updatedAt: updatedAt
 });
 
-export const verification = sqliteTable('verification', {
-	id: text('id').primaryKey(),
+export const verification = pgTable('verification', {
+	id: betterAuthId('verification_id'),
 	identifier: text('identifier').notNull(),
 	value: text('value').notNull(),
-	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
-	createdAt: integer('created_at', { mode: 'timestamp' }),
-	updatedAt: integer('updated_at', { mode: 'timestamp' })
+	expiresAt: expiresAt,
+	createdAt: createdAt
 });

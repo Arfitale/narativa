@@ -88,7 +88,7 @@
 
 	<!-- vignette for text legibility -->
 	<div
-		class="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark-amethyst-100/90 via-transparent to-dark-amethyst-100/30"
+		class="pointer-events-none absolute inset-0 bg-linear-to-t from-dark-amethyst-100/90 via-transparent to-dark-amethyst-100/30"
 	></div>
 
 	<!-- back to website: top-left, no logo in this panel -->
@@ -105,7 +105,7 @@
 		{#if slides[active]?.caption}
 			{#key active}
 				<h2
-					class="[animation:fadeSlide_0.5s_ease-out] font-display text-3xl leading-tight font-semibold text-white"
+					class="animate-[fadeSlide_0.5s_ease-out] font-display text-3xl leading-tight font-semibold text-white"
 				>
 					{slides[active].caption?.[0]}<br />
 					{slides[active].caption?.[1]}
