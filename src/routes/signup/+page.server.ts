@@ -1,4 +1,4 @@
-import { auth } from '$lib/server/auth';
+import { auth } from '$lib/server/auth/auth';
 import { fail, redirect, type ActionFailure, type ActionResult } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
@@ -6,7 +6,6 @@ import { user } from '$lib/server/db/auth.schema';
 
 // Redirect if already authenticated
 export const load: PageServerLoad = async ({ locals }) => {
-	console.log(locals);
 	if (locals.session) {
 		throw redirect(302, '/');
 	}

@@ -62,5 +62,6 @@ export const verification = pgTable('verification', {
 	identifier: text('identifier').notNull(),
 	value: text('value').notNull(),
 	expiresAt: expiresAt,
-	createdAt: createdAt
+	createdAt: createdAt,
+	updatedAt: updatedAt
 });

@@ -1,5 +1,5 @@
 // src/app.d.ts
-import type { auth } from '$lib/server/auth';
+import type { auth } from '$lib/server/auth/auth';
 
 declare global {
 	namespace App {

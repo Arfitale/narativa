@@ -1,12 +1,27 @@
 <script lang="ts">
 	import Button from '../ui/button/button.svelte';
+	import { authClient } from '$lib/client/auth/auth-client';
 
-	function handleGoogle() {
-		window.location.href = '/auth/google';
+	let loading = $state(false);
+	let errorMessage = $state('');
+
+	async function handleGoogleLogin() {
+		loading = true;
+		errorMessage = '';
+
+		const { error } = await authClient.signIn.social({
+			provider: 'google',
+			callbackURL: '/app/dashboard' // Where user lands AFTER successful login
+		});
+
+		if (error) {
+			errorMessage = error.message || 'Failed to initiate Google login.';
+			loading = false;
+		}
 	}
 </script>
 
-<Button type="button" variant="outline" onclick={handleGoogle} class="h-11 w-full gap-2">
+<Button type="button" variant="outline" onclick={handleGoogleLogin} class="h-11 w-full gap-2">
 	<svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true">
 		<path
 			fill="#4285F4"

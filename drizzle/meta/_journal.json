@@ -15,6 +15,13 @@
       "when": 1784705468268,
       "tag": "0001_busy_power_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784771841643,
+      "tag": "0002_funny_greymalkin",
+      "breakpoints": true
     }
   ]
 }
