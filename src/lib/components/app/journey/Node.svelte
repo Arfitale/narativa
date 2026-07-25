@@ -12,10 +12,12 @@
 			status: 'completed' | 'active' | 'locked';
 			offsetX: number;
 		};
+		activePopoverId: number | null;
 	}
 
-	const { chapter }: Props = $props();
-	let open = $state(false);
+	let { chapter, activePopoverId = $bindable(null) }: Props = $props();
+
+	$effect(() => {});
 
 	const variants = {
 		completed: {
@@ -33,17 +35,31 @@
 	};
 
 	let style = $derived(variants[chapter.status]);
+	let isOpen = $derived(activePopoverId === chapter.id);
+	let isTooltipVisible = $derived(chapter.status === 'active' && !isOpen);
+
+	function handleOpenChange(open: boolean) {
+		if (open) {
+			activePopoverId = chapter.id; // Open this node (closes all others)
+		} else if (activePopoverId === chapter.id) {
+			activePopoverId = null; // Close if this node was open
+		}
+	}
+
+	$inspect(isTooltipVisible, 'isTooltipVisible');
 </script>
 
 <div
 	class="relative flex flex-col items-center select-none"
 	style="transform: translateX({chapter.offsetX}px)"
 >
-	{#if chapter.status === 'active'}
+	{#if isTooltipVisible}
 		<NodeTooltip />
 	{/if}
-	<Popover.Root bind:open>
+	<Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
 		<Popover.Trigger
+			data-node-button
+			data-active-node={chapter.status === 'active'}
 			disabled={chapter.status === 'locked'}
 			class="group relative h-20 w-20 cursor-pointer focus:outline-none disabled:cursor-not-allowed"
 		>
@@ -91,7 +107,7 @@
 			</p>
 
 			<button
-				onclick={() => (open = false)}
+				onclick={() => (isOpen = false)}
 				class="flex w-full items-center justify-center gap-1.5 rounded-lg bg-violet-600 py-1.5 text-xs font-semibold text-white shadow transition hover:bg-violet-700 active:scale-95"
 			>
 				<Play class="h-3.5 w-3.5 fill-current" />
@@ -101,11 +117,11 @@
 		</Popover.Content>
 	</Popover.Root>
 
-	<span
-		class={`mt-3 max-w-32 text-center text-xs font-bold ${
+	<!-- <span
+		class={`absolute mt-3 max-w-32 text-center text-xs font-bold ${
 			chapter.status === 'locked' ? 'text-muted-foreground' : 'text-foreground'
 		}`}
 	>
 		{chapter.title}
-	</span>
+	</span> -->
 </div>

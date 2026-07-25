@@ -12,5 +12,5 @@
 		{@render children?.()}
 	</main>
 
-	<!-- <BottomNav /> -->
+	<BottomNav />
 </div>
