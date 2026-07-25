@@ -149,9 +149,8 @@
 	--sidebar-primary-foreground: #ffffff;
 	--sidebar-accent: var(--color-lavender-purple-900);
 	--sidebar-accent-foreground: var(--color-deep-amethyst-500);
-	--sidebar-border: color-mix(in oklab, var(--color-royal-violet-500) 16%, transparent 84%);
+	--sidebar-border: var(--border);
 	--sidebar-ring: var(--color-royal-violet-400);
-
 	/* extra brand-only tokens, not part of the shadcn base set */
 	--gradient-from: var(--color-royal-violet-500);
 	--gradient-to: var(--color-indigo-velvet-600);
@@ -293,4 +292,27 @@
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.001ms !important;
 	}
+}
+
+/* app.css */
+
+/* Matikan animasi bawaan browser agar tidak bertabrakan dengan JavaScript */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none !important;
+	mix-blend-mode: normal !important;
+}
+
+/* Pastikan layer mode baru (new) berada tepat di atas layer lama (old) */
+::view-transition-old(root) {
+	z-index: 1;
+}
+
+::view-transition-new(root) {
+	z-index: 9999;
+}
+
+/* Tambahkan ini untuk mencegah glitch render pada browser Chromium */
+html {
+	view-transition-name: root;
 }

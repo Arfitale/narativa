@@ -11,7 +11,7 @@
 
 		const { error } = await authClient.signIn.social({
 			provider: 'google',
-			callbackURL: '/app/dashboard' // Where user lands AFTER successful login
+			callbackURL: '/app/' // Where user lands AFTER successful login
 		});
 
 		if (error) {

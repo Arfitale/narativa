@@ -4,7 +4,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Checkbox } from '$lib/components/ui/checkbox';
-	import Logo from './Logo.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	import { enhance } from '$app/forms';
 	import GoogleAuthButton from './GoogleAuthButton.svelte';
 	import { goto } from '$app/navigation';
@@ -21,7 +21,7 @@
 	class="mx-auto flex w-full max-w-md flex-col justify-center bg-card px-6 py-10 text-card-foreground sm:px-10"
 >
 	<!-- logo sits above the heading -->
-	<Logo class="mb-8" />
+	<Logo />
 
 	<div class="mb-8">
 		<h1 class="font-display text-3xl font-semibold text-foreground sm:text-4xl">Buat akun baru</h1>
