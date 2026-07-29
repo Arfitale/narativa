@@ -45,8 +45,6 @@
 			activePopoverId = null; // Close if this node was open
 		}
 	}
-
-	$inspect(isTooltipVisible, 'isTooltipVisible');
 </script>
 
 <div
@@ -116,12 +114,4 @@
 			<BitsPopover.Arrow style="fill: #3182ce;" />
 		</Popover.Content>
 	</Popover.Root>
-
-	<!-- <span
-		class={`absolute mt-3 max-w-32 text-center text-xs font-bold ${
-			chapter.status === 'locked' ? 'text-muted-foreground' : 'text-foreground'
-		}`}
-	>
-		{chapter.title}
-	</span> -->
 </div>

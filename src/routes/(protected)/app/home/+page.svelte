@@ -21,10 +21,7 @@
 		{ label: 'Selesai', status: 'upcoming' }
 	];
 
-	const badges: BadgeItem[] = [
-		{ icon: 'book', label: 'Pembaca Rajin' },
-		{ icon: 'search', label: 'Peneliti Cerita' }
-	];
+	const badges: BadgeItem[] = [];
 
 	function handleContinue() {
 		console.log('continue journey');
