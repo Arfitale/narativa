@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SideNav from '$lib/components/app/nav/SideNav.svelte';
 	import BottomNav from '$lib/components/app/nav/BottomNav.svelte';
-	import DialogueSystem from '$lib/components/app/vn/DialogueSystem.svelte';
+	import DialogueSystem from '$lib/features/dialogues/components/DialogueSystem.svelte';
 
 	let { children } = $props();
 </script>
@@ -13,7 +13,6 @@
 		{@render children?.()}
 	</main>
 
-	<!-- <DialogueSystem /> -->
-
+	<DialogueSystem />
 	<BottomNav />
 </div>

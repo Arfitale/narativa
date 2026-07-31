@@ -1,4 +1,4 @@
-import { betterAuthId, createdAt, expiresAt, updatedAt } from '$lib/utils/server/db/pg';
+import { betterAuthId, createdAt, expiresAt, updatedAt } from '$lib/features/database/utils/pg';
 import { pgTable, text, timestamp, boolean, uuid, primaryKey } from 'drizzle-orm/pg-core';
 
 /* ============================================================

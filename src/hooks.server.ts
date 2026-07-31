@@ -1,5 +1,5 @@
 // src/hooks.server.ts
-import { auth } from '$lib/server/auth/auth';
+import { auth } from '$lib/features/auth/server/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 import { building } from '$app/environment';
 import type { Handle } from '@sveltejs/kit';

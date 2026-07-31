@@ -5,6 +5,7 @@
 	import BadgesCard from '$lib/components/app/home/BadgesCard.svelte';
 	import StoryCollectionCard from '$lib/components/app/home/StoryCollectionCard.svelte';
 	import type { ChapterProgress, JourneyNode, BadgeItem } from '$lib/components/app/home/types';
+	import { dialogue } from '$lib/features/dialogues/dialogue.svelte';
 
 	const chapter: ChapterProgress = {
 		chapterLabel: 'Chapter 2',
@@ -30,6 +31,10 @@
 	function handleJourneySelect(index: number) {
 		console.log('open node', index);
 	}
+
+	function handleClick() {
+		dialogue.start('intro');
+	}
 </script>
 
 <svelte:head>
@@ -47,4 +52,5 @@
 	</div>
 
 	<StoryCollectionCard storiesLearned={12} />
+	<button onclick={handleClick}>test dialogue</button>
 </div>
