@@ -1,8 +1,8 @@
 <script lang="ts">
-	import CurrentChapter from '$lib/components/app/journey/CurrentChapter.svelte';
-	import Node from '$lib/components/app/journey/Node.svelte';
-	import StatsBar from '$lib/components/app/journey/StatsBar.svelte';
-	import type { Unit } from '$lib/components/app/journey/type';
+	import CurrentChapter from '$lib/features/journey/components/CurrentChapter.svelte';
+	import Node from '$lib/features/journey/components/Node.svelte';
+	import StatsBar from '$lib/features/journey/components/StatsBar.svelte';
+	import type { Unit } from '$lib/features/journey/types';
 
 	const units: Unit[] = [
 		{

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Award, BookOpen, Search, Flame, Trophy, Lock, ChevronRight } from '@lucide/svelte';
 	import type { Component } from 'svelte';
-	import type { BadgeItem } from './types';
+	import type { BadgeItem } from '$lib/features/app/types';
 
 	interface Props {
 		badges: BadgeItem[];

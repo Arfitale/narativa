@@ -1,6 +1,6 @@
 <script lang="ts">
-	import SideNav from '$lib/components/app/nav/SideNav.svelte';
-	import BottomNav from '$lib/components/app/nav/BottomNav.svelte';
+	import SideNav from '$lib/features/app/components/nav/SideNav.svelte';
+	import BottomNav from '$lib/features/app/components/nav/BottomNav.svelte';
 	import DialogueSystem from '$lib/features/dialogues/components/DialogueSystem.svelte';
 
 	let { children } = $props();

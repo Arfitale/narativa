@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Greeting from '$lib/components/app/home/Greeting.svelte';
-	import ChapterProgressCard from '$lib/components/app/home/ChapterProgressCard.svelte';
-	import JourneyMap from '$lib/components/app/home/JourneyMap.svelte';
-	import BadgesCard from '$lib/components/app/home/BadgesCard.svelte';
-	import StoryCollectionCard from '$lib/components/app/home/StoryCollectionCard.svelte';
-	import type { ChapterProgress, JourneyNode, BadgeItem } from '$lib/components/app/home/types';
+	import Greeting from '$lib/features/app/components/home/Greeting.svelte';
+	import ChapterProgressCard from '$lib/features/app/components/home/ChapterProgressCard.svelte';
+	import JourneyMap from '$lib/features/app/components/home/JourneyMap.svelte';
+	import BadgesCard from '$lib/features/app/components/home/BadgesCard.svelte';
+	import StoryCollectionCard from '$lib/features/app/components/home/StoryCollectionCard.svelte';
+	import type { ChapterProgress, JourneyNode, BadgeItem } from '$lib/features/app/types';
 	import { dialogue } from '$lib/features/dialogues/dialogue.svelte';
 
 	const chapter: ChapterProgress = {

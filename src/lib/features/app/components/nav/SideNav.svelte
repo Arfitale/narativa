@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { navItems } from '$lib/data/nav-item';
-	import ModeToggle from '$lib/components/ModeToggle.svelte';
-	import Logo from '$lib/components/Logo.svelte';
+	import { navItems } from '$lib/features/app/data/nav-item';
+	import ModeToggle from '$lib/features/app/components/ModeToggle.svelte';
+	import Logo from '$lib/features/app/components/Logo.svelte';
 </script>
 
 <aside

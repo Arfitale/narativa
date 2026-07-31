@@ -1,5 +1,5 @@
 import { Award, BookOpen, House, Map, Store, User } from '@lucide/svelte';
-import type { NavItem } from '../components/app/home/types';
+import type { NavItem } from '$lib/features/app/types';
 
 export const navItems: NavItem[] = [
 	{ href: '/app/home', label: 'Beranda', icon: House, name: 'home' },

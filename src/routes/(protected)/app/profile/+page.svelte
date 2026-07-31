@@ -11,7 +11,7 @@
 		Heart,
 		Gem
 	} from '@lucide/svelte';
-	import type { UserProfile } from '$lib/types/profile';
+	import type { UserProfile } from '$lib/features/profile/types';
 
 	const profile: UserProfile = {
 		name: 'AhmadJaya2004',

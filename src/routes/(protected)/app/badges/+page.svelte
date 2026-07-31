@@ -11,7 +11,7 @@
 		Search,
 		Medal
 	} from '@lucide/svelte';
-	import type { Badge, UserAchievementSummary } from '$lib/types/badges';
+	import type { Badge, UserAchievementSummary } from '$lib/features/badges/types';
 
 	// Summary data matching Narativa branding
 	const summary: UserAchievementSummary = {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { BookOpen, Play } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
-	import type { ChapterProgress } from './types';
+	import type { ChapterProgress } from '$lib/features/app/types';
 
 	interface Props {
 		chapter: ChapterProgress;

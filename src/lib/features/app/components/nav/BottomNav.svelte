@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mobileNavIems } from '$lib/data/nav-item';
+	import { mobileNavIems } from '$lib/features/app/data/nav-item';
 	import { page } from '$app/state';
 </script>
 

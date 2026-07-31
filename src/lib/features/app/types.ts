@@ -1,4 +1,5 @@
-import type { SvelteComponent } from 'svelte';
+// Home
+import type { Component } from 'svelte';
 
 export interface ChapterProgress {
 	chapterLabel: string;
@@ -23,4 +24,16 @@ export interface NavItem {
 	label: string;
 	icon: Component;
 	name?: string; // Optional property to specify the active URL for the navigation item
+}
+
+// Journey
+export type ChapterStatus = 'completed' | 'active' | 'locked';
+export type ChapterType = 'material' | 'activity' | 'challenge';
+
+export interface ChapterNode {
+	id: number;
+	title: string;
+	type: ChapterType;
+	status: ChapterStatus;
+	offsetX: number;
 }
