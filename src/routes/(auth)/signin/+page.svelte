@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ImagePanel, { type Slide } from '$lib/components/auth/ImagePanel.svelte';
-	import SignUpForm from '$lib/components/auth/SignUpForm.svelte';
-	import ModeToggle from '$lib/components/ModeToggle.svelte';
+	import ImagePanel, { type Slide } from '$lib/features/auth/components/ImagePanel.svelte';
+	import SignUpForm from '$lib/features/auth/components/SignUpForm.svelte';
+	import ModeToggle from '$lib/features/app/components/ModeToggle.svelte';
 
 	// Swap these for your own photos any time — omit `image` on a slide to
 	// fall back to the generated dune art instead.
@@ -35,12 +35,11 @@
 		<div
 			class="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-card shadow-2xl shadow-black/40 lg:grid-cols-2"
 		>
+			<SignUpForm />
 			<!-- image slider: hidden on small screens, shown from lg up -->
 			<div class="hidden p-3 lg:block">
 				<ImagePanel {slides} />
 			</div>
-
-			<SignUpForm />
 		</div>
 	</div>
 

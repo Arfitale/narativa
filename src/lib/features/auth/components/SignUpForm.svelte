@@ -28,7 +28,7 @@
 		<p class="mt-2 text-sm text-muted-foreground">
 			Sudah punya akun?&nbsp;
 			<a
-				href="/login"
+				href="/signin"
 				class="font-medium text-primary underline underline-offset-4 hover:opacity-80"
 			>
 				Log in
