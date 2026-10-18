@@ -1,13 +1,11 @@
-// src/app.d.ts
-import type { auth } from '$lib/server/auth/auth';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 declare global {
 	namespace App {
 		interface Locals {
-			user: typeof auth.$Infer.Session.user | null;
-			session: typeof auth.$Infer.Session.session | null;
+			supabase: SupabaseClient;
+			getUser: () => Promise<{ id: string; email: string | null; name: string | null } | null>;
 		}
 	}
 }
-
 export {};

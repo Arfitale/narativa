@@ -5,11 +5,10 @@ export const createdAt = timestamp('created_at', {
 })
 	.notNull()
 	.defaultNow();
-export const updatedAt = timestamp('updated_at', {
-	withTimezone: true
-})
+export const updatedAt = timestamp({ withTimezone: true })
 	.notNull()
-	.defaultNow();
+	.defaultNow()
+	.$onUpdate(() => new Date());
 export const expiresAt = timestamp('expires_at', {
 	withTimezone: true
 })
@@ -17,3 +16,8 @@ export const expiresAt = timestamp('expires_at', {
 	.defaultNow();
 
 export const betterAuthId = (idName = 'id') => text(idName).primaryKey();
+
+export const timestamps = {
+	createdAt,
+	updatedAt
+};

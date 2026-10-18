@@ -27,6 +27,7 @@
 		"prettier-plugin-svelte": "^4.1.0",
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"shadcn-svelte": "^1.4.2",
+		"supabase": "^2.121.0",
 		"svelte": "^5.56.1",
 		"svelte-check": "^4.6.0",
 		"tailwind-merge": "^3.5.0",
@@ -38,11 +39,13 @@
 	},
 	"dependencies": {
 		"@neondatabase/serverless": "^1.1.0",
+		"@supabase/ssr": "^0.12.7",
 		"@supabase/supabase-js": "^2.118.0",
 		"@types/node": "^26.1.1",
 		"better-auth": "^1.7.10",
 		"dotenv": "^17.4.2",
-		"drizzle-orm": "^0.45.2",
-		"mode-watcher": "^1.1.0"
+		"drizzle-orm": "^0.45.4",
+		"mode-watcher": "^1.1.0",
+		"postgres": "^3.4.9"
 	}
 }

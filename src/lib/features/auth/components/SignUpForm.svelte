@@ -6,7 +6,7 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import Logo from '$lib/features/app/components/Logo.svelte';
 	import { enhance } from '$app/forms';
-	// import GoogleAuthButton from './GoogleAuthButton.svelte';
+	import GoogleAuthButton from './GoogleAuthButton.svelte';
 	import { goto } from '$app/navigation';
 
 	let email = $state('');
@@ -20,9 +20,6 @@
 <div
 	class="mx-auto flex w-full max-w-md flex-col justify-center bg-card px-6 py-10 text-card-foreground sm:px-10"
 >
-	<!-- logo sits above the heading -->
-	<Logo />
-
 	<div class="mb-8">
 		<h1 class="font-display text-3xl font-semibold text-foreground sm:text-4xl">Buat akun baru</h1>
 		<p class="mt-2 text-sm text-muted-foreground">
@@ -132,5 +129,5 @@
 		<span class="h-px flex-1 bg-border"></span>
 	</div>
 
-	<!-- <GoogleAuthButton /> -->
+	<GoogleAuthButton />
 </div>
