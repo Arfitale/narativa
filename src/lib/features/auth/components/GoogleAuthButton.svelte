@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { authClient } from '$lib/features/auth/client/auth-client';
+	// import { authClient } from '$lib/features/auth/client/auth-client';
 
 	let loading = $state(false);
 	let errorMessage = $state('');
@@ -9,15 +9,15 @@
 		loading = true;
 		errorMessage = '';
 
-		const { error } = await authClient.signIn.social({
-			provider: 'google',
-			callbackURL: '/app/' // Where user lands AFTER successful login
-		});
+		// const { error } = await authClient.signIn.social({
+		// 	provider: 'google',
+		// 	callbackURL: '/app/' // Where user lands AFTER successful login
+		// });
 
-		if (error) {
-			errorMessage = error.message || 'Failed to initiate Google login.';
-			loading = false;
-		}
+		// if (error) {
+		// 	errorMessage = error.message || 'Failed to initiate Google login.';
+		// 	loading = false;
+		// }
 	}
 </script>
 

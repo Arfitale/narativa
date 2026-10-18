@@ -6,7 +6,7 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import Logo from '$lib/features/app/components/Logo.svelte';
 	import { enhance } from '$app/forms';
-	import GoogleAuthButton from './GoogleAuthButton.svelte';
+	// import GoogleAuthButton from './GoogleAuthButton.svelte';
 	import { goto } from '$app/navigation';
 
 	let email = $state('');
@@ -132,5 +132,5 @@
 		<span class="h-px flex-1 bg-border"></span>
 	</div>
 
-	<GoogleAuthButton />
+	<!-- <GoogleAuthButton /> -->
 </div>

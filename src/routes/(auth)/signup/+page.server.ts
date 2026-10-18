@@ -1,15 +1,5 @@
-import { auth } from '$lib/features/auth/server/auth';
 import { fail, redirect, type ActionFailure, type ActionResult } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { db } from '$lib/features/database/server/index';
-import { user } from '$lib/features/database/server/auth.schema';
-
-// Redirect if already authenticated
-export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.session) {
-		throw redirect(302, '/');
-	}
-};
 
 export const actions: Actions = {
 	// 1. Email/Password Sign Up Action
@@ -23,13 +13,14 @@ export const actions: Actions = {
 		}
 
 		try {
-			await auth.api.signUpEmail({
-				body: {
-					name: email.split('@')[0], // Use the part before '@' as a default name
-					email,
-					password
-				}
-			});
+			console.log("trying sign up")
+			// await auth.api.signUpEmail({
+			// 	body: {
+			// 		name: email.split('@')[0], // Use the part before '@' as a default name
+			// 		email,
+			// 		password
+			// 	}
+			// });
 		} catch (err: any) {
 			const message = err.message?.toLowerCase().includes('already exists')
 				? 'This email is already registered. Please sign in instead.'
