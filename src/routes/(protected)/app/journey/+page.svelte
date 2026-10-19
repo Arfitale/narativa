@@ -232,5 +232,4 @@
 			{/each}
 		</div>
 	</main>
-	<StatsBar />
 </div>

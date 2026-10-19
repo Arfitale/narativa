@@ -4,7 +4,6 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Checkbox } from '$lib/components/ui/checkbox';
-	import Logo from '$lib/features/app/components/Logo.svelte';
 	import { enhance } from '$app/forms';
 	import GoogleAuthButton from './GoogleAuthButton.svelte';
 	import { goto } from '$app/navigation';
