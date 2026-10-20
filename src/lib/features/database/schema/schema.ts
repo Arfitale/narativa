@@ -347,3 +347,4 @@ export type NewNode = typeof nodes.$inferInsert;
 export type NodeProgress = typeof nodeProgress.$inferSelect;
 export type NodeAttempt = typeof nodeAttempts.$inferSelect;
 export type StoryDraft = typeof storyDrafts.$inferSelect;
+export type Section = typeof sections.$inferSelect;

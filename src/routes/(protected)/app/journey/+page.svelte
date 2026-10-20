@@ -1,8 +1,11 @@
 <script lang="ts">
 	import CurrentChapter from '$lib/features/journey/components/CurrentChapter.svelte';
 	import Node from '$lib/features/journey/components/Node.svelte';
-	import StatsBar from '$lib/features/journey/components/StatsBar.svelte';
 	import type { Unit } from '$lib/features/journey/types';
+	import type { PageData } from './$types';
+	let { data }: { data: PageData } = $props();
+
+	$inspect(data.learningTracks);
 
 	const units: Unit[] = [
 		{
