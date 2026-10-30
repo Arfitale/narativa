@@ -1,23 +1,3 @@
-/**
- * Skema database Narativa (Drizzle ORM + PostgreSQL/Supabase).
- * Lokasi yang disarankan: src/lib/server/db/schema.ts
- *
- * Tiga lapisan:
- *  1. KONTEN      : learning_paths, sections, nodes, node_prerequisites, node_answer_keys
- *  2. PROGRES     : profiles, node_progress, node_attempts
- *  3. STORY STUDIO: story_projects, story_drafts, story_snapshots, story_reviews, story_submissions
- *
- * Catatan desain:
- *  - Status "terkunci/tersedia" TIDAK disimpan. Dihitung server dari
- *    node_prerequisites + node_progress, sehingga tidak bisa basi/tidak sinkron.
- *  - Hanya "in_progress" dan "completed" yang disimpan di node_progress.
- *  - Riwayat percobaan (node_attempts) terpisah dari status node. Replay hanya
- *    menambah attempt baru; completed_at tidak pernah dihapus.
- *  - Semua tabel mengaktifkan RLS tanpa policy (deny-all untuk anon/authenticated
- *    via PostgREST/Supabase client). Semua akses data lewat server SvelteKit
- *    (koneksi Drizzle server-side), yang memverifikasi user dan mem-filter user_id.
- *  - Gunakan `casing: 'snake_case'` di drizzle.config.ts DAN saat membuat klien drizzle().
- */
 import { sql } from 'drizzle-orm';
 import {
 	boolean,
@@ -43,8 +23,6 @@ import type {
 	StoryPlan
 } from './content-types';
 
-// ---------- Enum ----------
-
 export const nodeType = pgEnum('node_type', [
 	'learn',
 	'practice',
@@ -65,10 +43,6 @@ const timestamps = {
 		.defaultNow()
 		.$onUpdate(() => new Date())
 };
-
-// =====================================================================
-// 1. KONTEN
-// =====================================================================
 
 export const learningPaths = pgTable('learning_paths', {
 	id: uuid().primaryKey().defaultRandom(),
@@ -108,17 +82,13 @@ export const nodes = pgTable(
 		sectionId: uuid()
 			.notNull()
 			.references(() => sections.id, { onDelete: 'cascade' }),
-		/** Kunci stabil untuk seed/upsert & URL, mis. "apa-itu-cerpen". Nomor "1.2" dihitung dari posisi. */
 		slug: text().notNull().unique(),
 		title: text().notNull(),
 		type: nodeType().notNull(),
 		isRequired: boolean().notNull().default(true),
 		position: integer().notNull(),
-		/** Naik setiap kali materi node diubah; dicatat di setiap attempt. */
 		version: integer().notNull().default(1),
-		/** Konten publik (tanpa kunci jawaban). Lihat content-types.ts. */
 		content: jsonb().$type<NodeContent>().notNull(),
-		/** Ambang lulus (0-100) untuk node yang dinilai (checkpoint, dll). Null = tidak dinilai. */
 		passingScore: integer(),
 		isPublished: boolean().notNull().default(true),
 		...timestamps
@@ -133,15 +103,12 @@ export const nodes = pgTable(
 	]
 ).enableRLS();
 
-/** Edge prasyarat: `nodeId` baru terbuka jika semua `requiredNodeId`-nya completed. */
 export const nodePrerequisites = pgTable(
 	'node_prerequisites',
 	{
 		nodeId: uuid()
 			.notNull()
 			.references(() => nodes.id, { onDelete: 'cascade' }),
-		// RESTRICT: node yang masih menjadi prasyarat tidak boleh terhapus diam-diam
-		// (kalau edge ikut hilang, node berikutnya akan terbuka untuk semua siswa).
 		requiredNodeId: uuid()
 			.notNull()
 			.references(() => nodes.id, { onDelete: 'restrict' })
@@ -153,7 +120,6 @@ export const nodePrerequisites = pgTable(
 	]
 ).enableRLS();
 
-/** Kunci jawaban privat. Jangan pernah di-select ke respons yang dikirim ke browser. */
 export const nodeAnswerKeys = pgTable('node_answer_keys', {
 	nodeId: uuid()
 		.primaryKey()
@@ -165,10 +131,6 @@ export const nodeAnswerKeys = pgTable('node_answer_keys', {
 		.$onUpdate(() => new Date())
 }).enableRLS();
 
-// =====================================================================
-// 2. PENGGUNA & PROGRES
-// =====================================================================
-
 export const profiles = pgTable('profiles', {
 	id: uuid()
 		.primaryKey()
@@ -177,10 +139,6 @@ export const profiles = pgTable('profiles', {
 	...timestamps
 }).enableRLS();
 
-/**
- * Status penyelesaian per (user, node). Hanya in_progress/completed.
- * completed_at diisi sekali dan tidak dihapus oleh replay.
- */
 export const nodeProgress = pgTable(
 	'node_progress',
 	{
@@ -206,7 +164,6 @@ export const nodeProgress = pgTable(
 	]
 ).enableRLS();
 
-/** Riwayat percobaan. Selalu bertambah; tidak ditimpa oleh replay. */
 export const nodeAttempts = pgTable(
 	'node_attempts',
 	{
@@ -245,11 +202,6 @@ export const nodeAttempts = pgTable(
 	]
 ).enableRLS();
 
-// =====================================================================
-// 3. STORY STUDIO
-// =====================================================================
-
-/** Satu proyek cerpen per user per learning path. `plan` menampung keluaran Section 5. */
 export const storyProjects = pgTable(
 	'story_projects',
 	{
@@ -266,11 +218,6 @@ export const storyProjects = pgTable(
 	(t) => [unique('story_projects_user_path_uq').on(t.userId, t.pathId)]
 ).enableRLS();
 
-/**
- * Draf kerja (satu baris per proyek, di-upsert saat simpan).
- * `revision` = optimistic locking: UPDATE ... WHERE revision = :dibaca, lalu revision + 1.
- * Jika 0 baris terpengaruh, tolak simpan (ada versi lebih baru, mis. dari perangkat lain).
- */
 export const storyDrafts = pgTable(
 	'story_drafts',
 	{
@@ -289,7 +236,6 @@ export const storyDrafts = pgTable(
 	(t) => [check('story_drafts_counts_nonneg', sql`${t.wordCount} >= 0 and ${t.revision} >= 0`)]
 ).enableRLS();
 
-/** Salinan beku draf pada titik tinjau (initial) dan setelah revisi (revised). Tidak diubah. */
 export const storySnapshots = pgTable(
 	'story_snapshots',
 	{
@@ -306,7 +252,6 @@ export const storySnapshots = pgTable(
 	(t) => [index('story_snapshots_project_idx').on(t.projectId, t.createdAt)]
 ).enableRLS();
 
-/** Tinjauan rubrik atas sebuah snapshot (node 6.4). */
 export const storyReviews = pgTable(
 	'story_reviews',
 	{
@@ -324,7 +269,6 @@ export const storyReviews = pgTable(
 	(t) => [index('story_reviews_snapshot_idx').on(t.snapshotId)]
 ).enableRLS();
 
-/** Versi final (node 6.7): menunjuk ke snapshot beku, terpisah dari draf kerja. */
 export const storySubmissions = pgTable(
 	'story_submissions',
 	{
@@ -341,7 +285,6 @@ export const storySubmissions = pgTable(
 ).enableRLS();
 
 // ---------- Tipe turunan ----------
-
 export type Node = typeof nodes.$inferSelect;
 export type NewNode = typeof nodes.$inferInsert;
 export type NodeProgress = typeof nodeProgress.$inferSelect;

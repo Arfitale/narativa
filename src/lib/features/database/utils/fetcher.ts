@@ -1,6 +1,12 @@
 import { eq, asc, and, inArray } from 'drizzle-orm';
 import { db } from '$lib/features/database/server/index';
-import { learningPaths, sections, nodes } from '$lib/features/database/schema/schema';
+import {
+	learningPaths,
+	sections,
+	nodes,
+	nodePrerequisites,
+	nodeProgress
+} from '$lib/features/database/schema/schema';
 
 export async function getLearningTrack(slug: string) {
 	const [path] = await db
@@ -66,57 +72,36 @@ export async function getLearningTrack(slug: string) {
 	};
 }
 
-export async function getLearningContent(slug: string) {
-	// 1. Find the published learning path
-	const [path] = await db
-		.select({
-			id: learningPaths.id,
-			slug: learningPaths.slug,
-			title: learningPaths.title,
-			description: learningPaths.description,
-			contentLabel: learningPaths.contentLabel
-		})
-		.from(learningPaths)
-		.where(and(eq(learningPaths.slug, slug), eq(learningPaths.isPublished, true)))
+export async function getNodeBySlug(nodeSlug: string) {
+	const [node] = await db
+		.select()
+		.from(nodes)
+		.where(and(eq(nodes.slug, nodeSlug), eq(nodes.isPublished, true)))
 		.limit(1);
 
-	if (!path) return null;
+	if (!node) return null;
 
-	// 2. Fetch published sections in display order
-	const sectionRows = await db
+	return node;
+}
+
+export async function isNodeUnlocked(userId: string, nodeId: string) {
+	const [node] = await db.select().from(nodes).where(eq(nodes.id, nodeId));
+
+	if (!node) return false;
+
+	const prerequisites = await db
 		.select()
-		.from(sections)
-		.where(and(eq(sections.pathId, path.id), eq(sections.isPublished, true)))
-		.orderBy(asc(sections.position));
+		.from(nodePrerequisites)
+		.where(eq(nodePrerequisites.nodeId, nodeId));
 
-	if (sectionRows.length === 0) {
-		return { ...path, sections: [] };
-	}
+	if (prerequisites.length === 0) return true;
 
-	// 3. Fetch published nodes belonging to these sections
-	const nodeRows = await db
-		.select({
-			id: nodes.id,
-			sectionId: nodes.sectionId,
-			slug: nodes.slug,
-			title: nodes.title,
-			type: nodes.type,
-			isRequired: nodes.isRequired,
-			position: nodes.position,
-			version: nodes.version,
-			content: nodes.content,
-			passingScore: nodes.passingScore
-		})
-		.from(nodes)
-		.where(eq(nodes.isPublished, true))
-		.orderBy(asc(nodes.position));
+	const [currentNodeProgress] = await db
+		.select()
+		.from(nodeProgress)
+		.where(and(eq(nodeProgress.userId, userId), eq(nodeProgress.nodeId, nodeId)));
 
-	// 4. Assemble the nested response
-	return {
-		...path,
-		sections: sectionRows.map((section) => ({
-			...section,
-			nodes: nodeRows.filter((node) => node.sectionId === section.id)
-		}))
-	};
+	if (!currentNodeProgress) return false;
+
+	if (currentNodeProgress.status === 'completed') return true;
 }
