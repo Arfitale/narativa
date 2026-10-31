@@ -136,6 +136,7 @@ export const profiles = pgTable('profiles', {
 		.primaryKey()
 		.references(() => authUsers.id, { onDelete: 'cascade' }),
 	displayName: text().notNull(),
+	isOnboarded: boolean().notNull().default(false),
 	...timestamps
 }).enableRLS();
 

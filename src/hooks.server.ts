@@ -8,12 +8,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 			getAll: () => event.cookies.getAll(),
 			setAll: (cookiesToSet) =>
 				cookiesToSet.forEach(({ name, value, options }) =>
-					event.cookies.set(name, value, { ...options, path: '/' })
+					event.cookies.set(name, value, {
+						...options,
+						path: '/',
+						// Set explicit maxAge (e.g., 7 days in seconds) if you want a fixed session cutoff
+						maxAge: 60 * 60 * 24 * 7
+					})
 				)
 		}
 	});
 
-	// getClaims() verifies the JWT. Never trust getSession() for authorization on the server.
 	event.locals.getUser = async () => {
 		const { data, error } = await event.locals.supabase.auth.getClaims();
 		if (error || !data?.claims) return null;
@@ -23,6 +27,23 @@ export const handle: Handle = async ({ event, resolve }) => {
 			email: c.email ?? null,
 			name: (c.user_metadata?.full_name as string | undefined) ?? null
 		};
+	};
+
+	event.locals.safeGetSession = async () => {
+		const {
+			data: { user },
+			error
+		} = await event.locals.supabase.auth.getUser();
+
+		if (error || !user) {
+			return { session: null, user: null };
+		}
+
+		const {
+			data: { session }
+		} = await event.locals.supabase.auth.getSession();
+
+		return { session, user };
 	};
 
 	return resolve(event, {
