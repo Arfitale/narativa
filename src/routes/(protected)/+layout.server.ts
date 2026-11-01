@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
+import { getProfile } from '$lib/features/database/utils/user-profiles';
 
 export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabase }, url }) => {
 	const { session, user } = await safeGetSession();
@@ -9,13 +10,8 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
 		throw redirect(303, `/signin`);
 	}
 
-	const { data: profile } = await supabase
-		.from('profiles')
-		.select()
-		.eq('id', user.id)
-		.maybeSingle();
-
-	if (!profile?.is_onboarded && url.pathname !== '/app/onboarding') {
+	const profile = await getProfile(user.id);
+	if (!profile.isOnboarded && url.pathname !== '/app/onboarding') {
 		throw redirect(303, '/app/onboarding');
 	}
 

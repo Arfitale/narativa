@@ -5,7 +5,8 @@ import {
 	sections,
 	nodes,
 	nodePrerequisites,
-	nodeProgress
+	nodeProgress,
+	profiles
 } from '$lib/features/database/schema/schema';
 
 export async function getLearningTrack(slug: string) {
@@ -104,4 +105,16 @@ export async function isNodeUnlocked(userId: string, nodeId: string) {
 	if (!currentNodeProgress) return false;
 
 	if (currentNodeProgress.status === 'completed') return true;
+}
+
+export async function isUsernameExist(name: string) {
+	const [existing] = await db
+		.select()
+		.from(profiles)
+		.where(eq(profiles.displayName, name))
+		.limit(1);
+	if (existing) {
+		return true;
+	}
+	return false;
 }
