@@ -21,6 +21,7 @@
 							Node Locked
 						{:else}
 							<a href={`/app/journey/${node.slug}`}>{node.title}</a>
+							<h2>{node.title}</h2>
 						{/if}
 					{/if}
 				{/each}
