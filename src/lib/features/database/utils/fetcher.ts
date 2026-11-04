@@ -8,6 +8,7 @@ import {
 	nodeProgress,
 	profiles
 } from '$lib/features/database/schema/schema';
+import { calculateProgression } from '$lib/features/app/server/progression';
 
 export async function getLearningTrack(slug: string) {
 	const [path] = await db
@@ -107,14 +108,34 @@ export async function isNodeUnlocked(userId: string, nodeId: string) {
 	if (currentNodeProgress.status === 'completed') return true;
 }
 
-export async function isUsernameExist(name: string) {
-	const [existing] = await db
-		.select()
-		.from(profiles)
-		.where(eq(profiles.displayName, name))
-		.limit(1);
-	if (existing) {
-		return true;
-	}
-	return false;
+export async function getProgressionTrack(userId: string) {
+	const [allSections, allNodes, progress, prerequisites] =
+		await Promise.all([
+			db.select()
+				.from(sections)
+				.orderBy(sections.position),
+
+			db.select()
+				.from(nodes)
+				.orderBy(nodes.position),
+
+			db.select({
+				nodeId: nodeProgress.nodeId,
+				status: nodeProgress.status
+			})
+				.from(nodeProgress)
+				.where(eq(nodeProgress.userId, userId)),
+
+			db.select()
+				.from(nodePrerequisites)
+		]);
+
+	const progression = calculateProgression(
+		allSections,
+		allNodes,
+		progress,
+		prerequisites
+	);
+
+	return progression
 }
